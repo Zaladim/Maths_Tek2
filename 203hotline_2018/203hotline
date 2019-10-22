@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+
+import sys
+import error
+import hotline
+
+def main():
+	try: 
+		sys.argv.index("-h")
+	except ValueError:
+		exit(hotline.start(sys.argv))
+	else:
+		exit(error.usage())
+
+if __name__ == "__main__":
+	main()

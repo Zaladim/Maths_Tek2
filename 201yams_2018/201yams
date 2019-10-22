@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2019
+## 201YAMS
+## File description:
+## Main
+##
+
+import sys
+import math
+import combination as com
+
+def display_usage():
+	print("USAGE")
+	print("\t./201yams d1 d2 d3 d4 d5 c\n")
+	print("DESCRIPTION")
+	print("\td1\tvalue of the first die (0 if not thrown)")
+	print("\td2\tvalue of the first die (0 if not thrown)")
+	print("\td3\tvalue of the first die (0 if not thrown)")
+	print("\td4\tvalue of the first die (0 if not thrown)")
+	print("\td5\tvalue of the first die (0 if not thrown)")
+	print("\tc\texpected combination")
+	return 0
+
+def error():
+	print("Invalid combination argument", file=sys.stderr)
+	display_usage()
+	return 84
+
+def display(x):
+	x*=100
+	return(f'{x:.2f}%')
+
+def parse(argv):
+	dice = []
+	comb = []
+
+	if (len(argv) != 7):
+		return error()
+	for i in range(1, 6):
+		try:
+			if (int(argv[i]) > 6 or int(argv[i]) < 0):
+				raise ValueError("Invalid argument")
+			dice.append(int(argv[i]))
+		except:
+			return error()
+	comb = argv[6].split('_')
+	if (len(comb) < 2):
+		return error()
+	try:
+		if (int(comb[1]) > 6 or int(comb[1]) <= 0):
+			return error()
+	except:
+			return error()
+	if (comb[0] != "full" and len(comb) > 2):
+		return error()
+	if (comb[0] == "yams"):
+		print("chances to get a " + comb[1] + " yams:  " + display(com.yams(dice, int(comb[1]))))
+	elif (comb[0] == "four"):
+		print("chances to get a " + comb[1] + " four-of-a-kind:  " + display(com.four(dice, int(comb[1]))))
+	elif (comb[0] == "three"):
+		print("chances to get a " + comb[1] + " three-of-a-kind:  " + display(com.three(dice, int(comb[1]))))
+	elif (comb[0] == "pair"):
+		print("chances to get a " + comb[1] + " pair:  " + display(com.pair(dice, int(comb[1]))))
+	elif (comb[0] == "full"):
+		if (len(comb) < 3 or int(comb[2]) > 6 or int(comb[2]) <= 0 or (comb[1] == comb[2])):
+			return error()
+		print("chances to get a " + comb[1] + " full of " + comb[2] + ":  " + display(com.full(dice, int(comb[1]), int(comb[2]))))
+	elif (comb[0] == "straight"):
+		if (int(comb[1]) < 5):
+			return error()
+		print("chances to get a " + comb[1] + " straight:  " + display(com.straight(dice, int(comb[1]))))
+	else:
+		return error()
+	return 0
+
+def main():
+	try: 
+		sys.argv.index("-h")
+	except ValueError:
+		exit(parse(sys.argv))
+	else:
+		exit(display_usage())
+
+if __name__ == "__main__":
+	main()
